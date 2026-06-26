@@ -12,9 +12,7 @@ def executor_agent(decision, profile, ranked_jobs, memory):
 
     print(f"\nExecutor Decision: {action}\n")
 
-    # -------------------------
-    # Generate Cover Letter
-    # -------------------------
+
     if action == "generate_cover_letter":
 
         if not ranked_jobs:
@@ -34,9 +32,7 @@ def executor_agent(decision, profile, ranked_jobs, memory):
             "cover_letter": letter
         }
 
-    # -------------------------
-    # Improve Resume
-    # -------------------------
+
     elif action == "improve_resume":
 
         improvements = improve_resume(profile)
@@ -44,18 +40,38 @@ def executor_agent(decision, profile, ranked_jobs, memory):
         from tools.email_tool import send_email
 
         body = f"""
-    Our AI Planner decided that your resume should be improved before searching for jobs.
+Our AI Planner decided that your resume should be improved before searching for jobs.
 
-    Resume Suggestions
+==============================
+RESUME SUGGESTIONS
+==============================
 
-    {json.dumps(improvements, indent=4)}
+Missing Skills
+--------------
+{chr(10).join("• " + skill for skill in improvements["missing_skills"])}
 
-    Please update your resume and upload it again.
+Recommended Projects
+--------------------
+{chr(10).join("• " + project for project in improvements["recommended_projects"])}
 
-    Regards,
+Resume Improvements
+-------------------
+{chr(10).join("• " + item for item in improvements["resume_improvements"])}
 
-    Autonomous AI Job Search Assistant
-    """
+ATS Keywords
+------------
+{", ".join(improvements["ats_keywords"])}
+
+Overall Feedback
+----------------
+{improvements["overall_feedback"]}
+
+Please update your resume and upload it again.
+
+Regards,
+
+Autonomous AI Job Search Assistant
+"""
 
         send_email(
             "Resume Improvement Suggestions",
