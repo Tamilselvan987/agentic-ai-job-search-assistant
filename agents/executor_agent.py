@@ -112,9 +112,7 @@ Autonomous AI Job Search Assistant
             "message": "Goal completed."
         }
 
-    # -------------------------
-    # Unknown
-    # -------------------------
+
     else:
 
         return {
